@@ -23,5 +23,5 @@ services:
     plan: free
     region: singapore
     maxmemoryPolicy: noeviction
-    persistenceMode: off
+    persistenceMode: "off"
     ipAllowList: []
