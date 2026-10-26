@@ -1,0 +1,5 @@
+# Add this override only when running the Node app on your host.
+services:
+  redis:
+    ports:
+      - "127.0.0.1:6379:6379"

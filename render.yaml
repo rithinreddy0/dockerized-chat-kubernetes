@@ -1,0 +1,27 @@
+# Free demonstration deployment; Kubernetes exercises remain in k8s/.
+services:
+  - type: web
+    name: course-chat-rithinreddy0
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health/ready
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: APP_VERSION
+        value: "1.0.0"
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: course-chat-store-rithinreddy0
+          property: connectionString
+  - type: keyvalue
+    name: course-chat-store-rithinreddy0
+    plan: free
+    region: singapore
+    maxmemoryPolicy: noeviction
+    persistenceMode: off
+    ipAllowList: []

@@ -1,0 +1,29 @@
+services:
+  chat:
+    build: .
+    image: course-chat:1.0.0
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      REDIS_URL: redis://redis:6379
+      APP_VERSION: "1.0.0"
+    depends_on:
+      redis:
+        condition: service_healthy
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 25s
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+volumes:
+  redis-data:
