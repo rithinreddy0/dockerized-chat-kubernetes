@@ -1,10 +1,16 @@
-# 6.0 Dockerized Chat Application with Kubernetes
+# Dockerized Chat with Kubernetes
 
 A regular chat application with **one-to-one messages and simple group chats**. Built with React, Node.js, Socket.IO, Redis, Docker and Kubernetes.
 
 ![Direct and group chat interface](docs/preview.png)
 
-For a free hosted demo, see [GitHub and Render deployment](docs/FREE-DEPLOYMENT.md). The included `render.yaml` defines only free-plan resources. Kubernetes deployment and scaling exercises remain separate from that single-instance hosted demo.
+For hosting instructions, see [GitHub and Render deployment](docs/FREE-DEPLOYMENT.md). The included `render.yaml` defines only free-plan resources. Kubernetes deployment and scaling exercises remain separate from that single-instance hosted demo.
+
+## Architecture
+
+The React client connects to a Node.js/Socket.IO server. Redis Pub/Sub distributes live events between application replicas; Redis lists retain recent per-conversation history. Kubernetes manifests define two application replicas and a persistent Redis instance. HTTP probes expose liveness and readiness, and shutdown handling drains the application before stopping it.
+
+The documented integration test uses two Node.js servers and three clients to check cross-replica delivery, private-message isolation, shared history and session recovery. That test is distinct from a live Kubernetes deployment. See the [verification record](docs/VERIFICATION.md) for the exact executed scope.
 
 ## Features
 
